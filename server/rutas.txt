@@ -1,0 +1,12 @@
+GET VEHICULOS: http://localhost:3000/vehiculos
+GET VEHICULOS POR ID: http://localhost:3000/vehiculos/:id
+PUT VEHICULOS: http://localhost:3000/vehiculos/:id
+DELETE VEHICULOS: http://localhost:3000/vehiculos/:id
+
+AGREGAR (PUT) IMAGENES: http://localhost:3000/vehiculos/:id
+
+ELIMINAR IMAGENES (POR ID DE IMAGEN): http://localhost:3000/vehiculos/:id/imagenes?ids=idImagen,idImagen.. 
+Query Parameter: ids (una lista de IDs de imágenes separados por comas)
+
+ELIMINAR IMAGENES (POR URL DE IMAGEN): http://localhost:3000/vehiculos/:id/imagenes-por-url?urls=http://example.com/image1.jpg,
+
