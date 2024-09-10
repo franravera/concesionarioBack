@@ -10,3 +10,8 @@ Query Parameter: ids (una lista de IDs de imágenes separados por comas)
 
 ELIMINAR IMAGENES (POR URL DE IMAGEN): http://localhost:3000/vehiculos/:id/imagenes-por-url?urls=http://example.com/image1.jpg,
 
+GET USUARIOS: http://localhost:3000/usuarios
+GET USUARIOS POR EMAIL: http://localhost:3000/usuarios/:email
+PUT USUARIOS: http://localhost:3000/usuarios/:id
+DELETE USUARIOS: http://localhost:3000/usuarios/:id
+POST USUARIOS: http://localhost:3000/usuarios
