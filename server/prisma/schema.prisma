@@ -7,17 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// Aquí es donde defines tus modelos, por ejemplo, un modelo '
 model Vehiculo {
   id          Int      @id @default(autoincrement())
-  tipo        String   // Motocicleta, Automovil, Embarcacion, UTV
+  tipo        String   
   marca       String
   modelo      String
   year        Int
   descripcion String
   precio      Float
-  kilometraje Int?     // Nuevo campo que puede ser nulo
-  imagenes    Imagen[] // Relación uno a muchos con el modelo Imagen
+  transmision String?
+  combustible String?
+  kilometraje Int?    
+  imagenes    Imagen[] 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

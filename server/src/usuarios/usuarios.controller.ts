@@ -1,4 +1,3 @@
-// src/usuarios/usuarios.controller.ts
 import { Controller, Post, Get, Put, Body, Param,Delete, HttpException, HttpStatus } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { Usuario } from '@prisma/client';

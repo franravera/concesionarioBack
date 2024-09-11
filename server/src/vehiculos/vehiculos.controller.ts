@@ -1,11 +1,10 @@
-// src/vehiculos/vehiculos.controller.ts
 import { Controller, Get, Post, Body, Put, Param, Query, Delete, UseInterceptors, UploadedFiles, HttpException, HttpStatus } from '@nestjs/common';
 import { VehiculosService } from './vehiculos.service';
 import { Vehiculo } from '@prisma/client';
 import { storage } from '../cloudinary/cloudinary.config';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 
-// Define un tipo que incluya todas las propiedades necesarias de Vehiculo y agregue 'imagenes'
+
 type VehiculoConImagenes = Omit<Vehiculo, 'id' | 'createdAt' | 'updatedAt'> & { imagenes?: string[] };
 
 @Controller('vehiculos')

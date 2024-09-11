@@ -13,11 +13,11 @@ cloudinary.config({
 
 export const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: async (req, file) => { // Cambiado a una función que retorna un objeto con las opciones correctas
+  params: async (req, file) => { 
     return {
       folder: 'vehiculos', // Carpeta en Cloudinary donde se guardarán las imágenes
-      format: undefined, // Ajustar el formato si es necesario
-      public_id: file.originalname.split('.')[0], // Nombre del archivo en Cloudinary
+      format: undefined, 
+      public_id: file.originalname.split('.')[0], 
     };
   },
 });
