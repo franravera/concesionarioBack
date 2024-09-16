@@ -132,4 +132,12 @@ export class VehiculosService {
     });
     return uniqueTransmision.map((item) => item.transmision);
   }
+  async getKilometrajeRange(): Promise<{ minKilometraje: number; maxKilometraje: number }> {
+    const [min, max] = await Promise.all([
+      this.prisma.vehiculo.findFirst({ orderBy: { kilometraje: 'asc' }, select: { kilometraje: true } }),
+      this.prisma.vehiculo.findFirst({ orderBy: { kilometraje: 'desc' }, select: { kilometraje: true } }),
+    ]);
+
+    return { minKilometraje: min?.kilometraje || 0, maxKilometraje: max?.kilometraje || 0 };
+  }
 }

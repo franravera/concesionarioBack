@@ -40,6 +40,15 @@ export class VehiculosController {
       throw new HttpException('Error al crear el vehículo.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  @Get('rango-kilometraje')
+  async getKilometrajeRange(): Promise<{ minKilometraje: number; maxKilometraje: number }> {
+    try {
+      return await this.vehiculosService.getKilometrajeRange();
+    } catch (error) {
+      console.error('Error al obtener el rango de kilometraje:', error);
+      throw new HttpException('Error al obtener el rango de kilometraje.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
   @Get('marcas')
   async getUniqueBrands(): Promise<string[]> {
     try {
