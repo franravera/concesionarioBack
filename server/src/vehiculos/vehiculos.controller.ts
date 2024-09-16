@@ -1,9 +1,22 @@
-import { Controller, Get, Post, Body, Put, Param, Query, Delete, UseInterceptors, UploadedFiles, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Query,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { VehiculosService } from './vehiculos.service';
 import { Vehiculo } from '@prisma/client';
 import { storage } from '../cloudinary/cloudinary.config';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-
+import { Logger } from '@nestjs/common';
 
 type VehiculoConImagenes = Omit<Vehiculo, 'id' | 'createdAt' | 'updatedAt'> & { imagenes?: string[] };
 
@@ -18,6 +31,7 @@ export class VehiculosController {
     @Body() vehiculoData: Omit<Vehiculo, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<{ message: string; vehiculo: Vehiculo }> {
     try {
+      Logger.log('Datos recibidos del cliente:', JSON.stringify(vehiculoData));
       const imagenes = files?.imagenes ? files.imagenes.map((file) => file.path) : [];
       const vehiculoConImagenes: VehiculoConImagenes = { ...vehiculoData, imagenes };
       const vehiculo = await this.vehiculosService.create(vehiculoConImagenes);
@@ -26,13 +40,98 @@ export class VehiculosController {
       throw new HttpException('Error al crear el vehículo.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-
-  @Get()
-  async findAll(): Promise<{ message: string; vehiculos: Vehiculo[] }> {
+  @Get('marcas')
+  async getUniqueBrands(): Promise<string[]> {
     try {
-      const vehiculos = await this.vehiculosService.findAll();
+      return await this.vehiculosService.getUniqueBrands();
+    } catch (error) {
+      console.error('Error al obtener marcas únicas:', error);  
+      throw new HttpException('Error al obtener marcas únicas.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+  @Get('tipos')
+async getUniqueTypes(): Promise<string[]> {
+  try {
+    return await this.vehiculosService.getUniqueTypes();
+  } catch (error) {
+    console.error('Error al obtener tipos únicos:', error);  
+    throw new HttpException('Error al obtener tipos únicos.', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+@Get('combustible')
+async getUniqueCombustible(): Promise<string[]> {
+  try {
+    return await this.vehiculosService.getUniqueCombustible();
+  } catch (error) {
+    console.error('Error al obtener combustible:', error);  
+    throw new HttpException('Error al obtener combustible.', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+@Get('transmision')
+async getUniqueTransmision(): Promise<string[]> {
+  try {
+    return await this.vehiculosService.getUniqueTransmision();
+  } catch (error) {
+    console.error('Error al obtener transmision:', error);  
+    throw new HttpException('Error al obtener transmision.', HttpStatus.INTERNAL_SERVER_ERROR);
+  }
+}
+  @Get()
+  async findAll(
+    @Query('marca') marca?: string,
+    @Query('tipo') tipo?: string,
+    @Query('transmision') transmision?: string,
+    @Query('combustible') combustible?: string,
+    @Query('minKilometraje') minKilometraje?: string,
+    @Query('maxKilometraje') maxKilometraje?: string,
+    @Query('minPrecio') minPrecio?: string,
+    @Query('maxPrecio') maxPrecio?: string,
+  ): Promise<{ message: string; vehiculos: Vehiculo[] }> {
+    try {
+      const whereClause: any = {};
+
+      if (marca) {
+        whereClause.marca = marca;
+      }
+      if (tipo) {
+        whereClause.tipo = tipo;
+      }
+      if (transmision) {
+        whereClause.transmision = transmision;
+      }
+      if (combustible) {
+        whereClause.combustible = combustible.trim();
+      }
+
+      if (minKilometraje || maxKilometraje) {
+        whereClause.kilometraje = {};
+        if (minKilometraje) {
+          whereClause.kilometraje.gte = Number(minKilometraje);
+        }
+        if (maxKilometraje) {
+          whereClause.kilometraje.lte = Number(maxKilometraje);
+        }
+      }
+
+    
+      if (minPrecio || maxPrecio) {
+        whereClause.precio = {};
+        if (minPrecio) {
+          whereClause.precio.gte = Number(minPrecio);
+        }
+        if (maxPrecio) {
+          whereClause.precio.lte = Number(maxPrecio);
+        }
+      }
+
+      console.log('Filtros aplicados:', whereClause); // Mostrar los filtros aplicados para depuración
+
+      const vehiculos = await this.vehiculosService.findAll(whereClause);
+     
+
       return { message: 'Vehículos recuperados con éxito.', vehiculos };
     } catch (error) {
+      console.error('Error al recuperar los vehículos:', error); // Imprimir el error para depuración
       throw new HttpException('Error al recuperar los vehículos.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
