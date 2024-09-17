@@ -8,13 +8,17 @@ import { VehiculosController } from './vehiculos/vehiculos.controller';
 import { VehiculosService } from './vehiculos/vehiculos.service';
 import { UsuariosController } from './usuarios/usuarios.controller';
 import { UsuariosService } from './usuarios/usuarios.service';
+import { BrandsService } from './brands/brands.service';
+import { BrandsController } from './brands/brands.controller';
+
+
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, 
     }),
   ],
-  controllers: [CloudinaryController, VehiculosController, UsuariosController], 
-  providers: [PrismaService, CloudinaryService, VehiculosService, UsuariosService ], 
+  controllers: [CloudinaryController, VehiculosController, UsuariosController, BrandsController], 
+  providers: [PrismaService, CloudinaryService, VehiculosService, UsuariosService, BrandsService ], 
 })
 export class AppModule {}

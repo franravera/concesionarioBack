@@ -9,7 +9,7 @@ datasource db {
 
 model Vehiculo {
   id          Int      @id @default(autoincrement())
-  tipo        String   
+  tipo        String
   marca       String
   modelo      String
   year        Int
@@ -17,23 +17,34 @@ model Vehiculo {
   precio      Float
   transmision String?
   combustible String?
-  kilometraje Int?    
-  imagenes    Imagen[] 
+  kilometraje Int?
+  imagenes    Imagen[]
+  brand       Brand[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Imagen {
-  id          Int      @id @default(autoincrement())
-  url         String
-  vehiculoId  Int
-  vehiculo    Vehiculo @relation(fields: [vehiculoId], references: [id])
+  id         Int      @id @default(autoincrement())
+  url        String
+  vehiculoId Int
+  vehiculo   Vehiculo @relation(fields: [vehiculoId], references: [id])
 }
 
 model Usuario {
   id        Int      @id @default(autoincrement())
-  email     String   @unique 
+  email     String   @unique
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Brand {
+  id         Int      @id @default(autoincrement())
+  nombre     String   @unique
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  ImageBrand String?
+  vehiculoId Int
+  vehiculo   Vehiculo @relation(fields: [vehiculoId], references: [id])
 }
