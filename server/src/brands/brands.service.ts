@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "prisma/prisma.service";
 import { Brand } from "@prisma/client";
 
-type BrandConImagen = Omit<Brand, 'id' | 'createdAt' | 'updatedAt'> & { imagen?: string };
+type BrandConImagen = Omit<Brand, 'id' | 'createdAt' | 'updatedAt'> & { imagen?: string; vehiculoId?: number };
 
 @Injectable()
 export class BrandsService {
@@ -12,7 +12,7 @@ export class BrandsService {
         const brand = await this.prisma.brand.findUnique({
             where: { id: brandId },
         });
-        if (brand.ImageBrand === url) {
+        if (brand && brand.ImageBrand === url) {
             await this.prisma.brand.update({
                 where: { id: brandId },
                 data: { ImageBrand: '' },
@@ -20,13 +20,14 @@ export class BrandsService {
         }
     }
 
-
     async create(data: BrandConImagen): Promise<Brand> {
         return this.prisma.brand.create({
             data: {
                 nombre: data.nombre,
                 ImageBrand: data.imagen || '',
-                vehiculoId: data.vehiculoId,
+                vehiculos: {
+                    // connect: { id: data.vehiculoId }, 
+                }
             }
         });
     }
@@ -37,15 +38,14 @@ export class BrandsService {
             data: {
                 nombre: data.nombre,
                 ImageBrand: data.imagen || '',
-                vehiculoId: data.vehiculoId,
+                vehiculos: data.vehiculoId ? { connect: { id: data.vehiculoId } } : undefined, 
             },
         });
     }
 
-
     async findAll(): Promise<Brand[]> {
         return this.prisma.brand.findMany(); 
-      }
+    }
 
     async findOne(id: number): Promise<Brand | null> {
         return this.prisma.brand.findUnique({
@@ -58,5 +58,4 @@ export class BrandsService {
             where: { id },
         });
     }
-
 }

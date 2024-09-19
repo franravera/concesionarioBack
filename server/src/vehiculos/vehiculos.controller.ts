@@ -49,15 +49,32 @@ export class VehiculosController {
       throw new HttpException('Error al obtener el rango de kilometraje.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  @Get('marcas')
-  async getUniqueBrands(): Promise<string[]> {
-    try {
-      return await this.vehiculosService.getUniqueBrands();
-    } catch (error) {
-      console.error('Error al obtener marcas únicas:', error);  
-      throw new HttpException('Error al obtener marcas únicas.', HttpStatus.INTERNAL_SERVER_ERROR);
+  // @Get('marcas')
+  // async getUniqueBrands(): Promise<string[]> {
+  //   try {
+  //     return await this.vehiculosService.getUniqueBrands();
+  //     // return await this.vehiculosService.getUniqueBrands();
+  //   } catch (error) {
+  //     console.error('Error al obtener marcas únicas:', error);  
+  //     throw new HttpException('Error al obtener marcas únicas.', HttpStatus.INTERNAL_SERVER_ERROR);
+  //   }
+  // }
+  @Get('por-brand')
+async getVehiclesByBrand(@Query('brandId') brandId: string): Promise<{ message: string; vehiculos: any[] }> {
+  try {
+    const id = parseInt(brandId, 10);
+    if (isNaN(id)) {
+      throw new HttpException('El parámetro brandId debe ser un número válido.', HttpStatus.BAD_REQUEST);
     }
+
+    const vehiculos = await this.vehiculosService.getVehiclesByBrandId(id);
+    return { message: 'Vehículos recuperados con éxito.', vehiculos };
+  } catch (error) {
+    console.error('Error al recuperar vehículos por brandId:', error);
+    throw new HttpException('Error al recuperar vehículos por brandId.', HttpStatus.INTERNAL_SERVER_ERROR);
   }
+}
+
   @Get('tipos')
 async getUniqueTypes(): Promise<string[]> {
   try {

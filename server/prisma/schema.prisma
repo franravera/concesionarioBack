@@ -19,9 +19,10 @@ model Vehiculo {
   combustible String?
   kilometraje Int?
   imagenes    Imagen[]
-  brand       Brand[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  brandId     Int
+  brand       Brand     @relation(fields: [brandId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Imagen {
@@ -40,11 +41,10 @@ model Usuario {
 }
 
 model Brand {
-  id         Int      @id @default(autoincrement())
-  nombre     String   @unique
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
+  id         Int        @id @default(autoincrement())
+  nombre     String     @unique
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
   ImageBrand String?
-  vehiculoId Int
-  vehiculo   Vehiculo @relation(fields: [vehiculoId], references: [id])
+  vehiculos  Vehiculo[] 
 }
