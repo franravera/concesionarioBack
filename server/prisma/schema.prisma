@@ -9,8 +9,6 @@ datasource db {
 
 model Vehiculo {
   id          Int      @id @default(autoincrement())
-  tipoId      Int
-  tipo        Tipo     @relation(fields: [tipoId], references: [id])
   marca       String
   modelo      String
   year        Int
@@ -20,7 +18,9 @@ model Vehiculo {
   combustible String?
   kilometraje Int?
   imagenes    Imagen[]
+  tipoId      Int
   brandId     Int
+  tipo        Tipo     @relation(fields: [tipoId], references: [id])
   brand       Brand     @relation(fields: [brandId], references: [id])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt

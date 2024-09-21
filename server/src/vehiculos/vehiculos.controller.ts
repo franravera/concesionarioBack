@@ -75,15 +75,6 @@ async getVehiclesByBrand(@Query('brandId') brandId: string): Promise<{ message: 
   }
 }
 
-  @Get('tipos')
-async getUniqueTypes(): Promise<string[]> {
-  try {
-    return await this.vehiculosService.getUniqueTypes();
-  } catch (error) {
-    console.error('Error al obtener tipos únicos:', error);  
-    throw new HttpException('Error al obtener tipos únicos.', HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-}
 @Get('combustible')
 async getUniqueCombustible(): Promise<string[]> {
   try {
