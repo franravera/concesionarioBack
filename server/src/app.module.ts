@@ -10,6 +10,8 @@ import { UsuariosController } from './usuarios/usuarios.controller';
 import { UsuariosService } from './usuarios/usuarios.service';
 import { BrandsService } from './brands/brands.service';
 import { BrandsController } from './brands/brands.controller';
+import { TiposService } from './tipos/tipos.service';
+import { TiposController } from './tipos/tipos.controller';
 
 
 @Module({
@@ -18,7 +20,7 @@ import { BrandsController } from './brands/brands.controller';
       isGlobal: true, 
     }),
   ],
-  controllers: [CloudinaryController, VehiculosController, UsuariosController, BrandsController], 
-  providers: [PrismaService, CloudinaryService, VehiculosService, UsuariosService, BrandsService ], 
+  controllers: [CloudinaryController, VehiculosController, UsuariosController, BrandsController, TiposController], 
+  providers: [PrismaService, CloudinaryService, VehiculosService, UsuariosService, BrandsService, TiposService ], 
 })
 export class AppModule {}
