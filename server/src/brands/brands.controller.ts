@@ -92,23 +92,28 @@ export class BrandsController {
   @Get()
   async findAll(): Promise<{ brands: Brand[] }> {
     try {
-      const brands = await this.brandsService.findAll();
-      return { brands };
+        const brands = await this.brandsService.findAll();
+        return { brands }; 
     } catch (error) {
-      throw new HttpException('Error al obtener las marcas.', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException('Error al obtener las marcas.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
-  }
+}
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<{ message: string; brand: Brand | null }> {
-    try {
-      const brand = await this.brandsService.findOne(+id);
-      if (!brand) {
-        throw new HttpException('Brand no encontrada.', HttpStatus.NOT_FOUND);
-      }
-      return { message: 'Bran recuperada con éxito.', brand };
-    } catch (error) {
-      throw new HttpException('Error al recuperar la brand.', HttpStatus.INTERNAL_SERVER_ERROR);
+    const tipoId = parseInt(id, 10);
+    if (isNaN(tipoId)) {
+        throw new HttpException("El ID debe ser un número", HttpStatus.BAD_REQUEST);
     }
-  }
+
+    try {
+        const brand = await this.brandsService.findOne(tipoId, { include: { vehiculos: true } });
+        if (!brand) {
+            throw new HttpException('Brand no encontrada.', HttpStatus.NOT_FOUND);
+        }
+        return { message: 'Brand recuperada con éxito.', brand };
+    } catch (error) {
+        throw new HttpException('Error al recuperar la brand.', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 }

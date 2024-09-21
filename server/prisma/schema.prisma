@@ -42,8 +42,6 @@ model Tipo {
 model Brand {
   id         Int        @id @default(autoincrement())
   nombre     String     @unique
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
   ImageBrand String?
   vehiculos  Vehiculo[] 
 }

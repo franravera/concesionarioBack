@@ -44,12 +44,15 @@ export class BrandsService {
     }
 
     async findAll(): Promise<Brand[]> {
-        return this.prisma.brand.findMany(); 
+        return this.prisma.brand.findMany({
+            include: { vehiculos: true },
+        });
     }
 
-    async findOne(id: number): Promise<Brand | null> {
+    async findOne(id: number, options?: any): Promise<Brand | null> {
         return this.prisma.brand.findUnique({
             where: { id },
+            ...options,
         });
     }
 
