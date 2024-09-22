@@ -49,31 +49,7 @@ export class VehiculosController {
       throw new HttpException('Error al obtener el rango de kilometraje.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  // @Get('marcas')
-  // async getUniqueBrands(): Promise<string[]> {
-  //   try {
-  //     return await this.vehiculosService.getUniqueBrands();
-  //     // return await this.vehiculosService.getUniqueBrands();
-  //   } catch (error) {
-  //     console.error('Error al obtener marcas únicas:', error);  
-  //     throw new HttpException('Error al obtener marcas únicas.', HttpStatus.INTERNAL_SERVER_ERROR);
-  //   }
-  // }
-  @Get('por-brand')
-async getVehiclesByBrand(@Query('brandId') brandId: string): Promise<{ message: string; vehiculos: any[] }> {
-  try {
-    const id = parseInt(brandId, 10);
-    if (isNaN(id)) {
-      throw new HttpException('El parámetro brandId debe ser un número válido.', HttpStatus.BAD_REQUEST);
-    }
 
-    const vehiculos = await this.vehiculosService.getVehiclesByBrandId(id);
-    return { message: 'Vehículos recuperados con éxito.', vehiculos };
-  } catch (error) {
-    console.error('Error al recuperar vehículos por brandId:', error);
-    throw new HttpException('Error al recuperar vehículos por brandId.', HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-}
 
 @Get('combustible')
 async getUniqueCombustible(): Promise<string[]> {
@@ -95,8 +71,8 @@ async getUniqueTransmision(): Promise<string[]> {
 }
   @Get()
   async findAll(
-    @Query('marca') marca?: string,
-    @Query('tipo') tipo?: string,
+    // @Query('marca') marca?: string,
+    // @Query('tipo') tipo?: string,
     @Query('transmision') transmision?: string,
     @Query('combustible') combustible?: string,
     @Query('minKilometraje') minKilometraje?: string,
@@ -107,12 +83,12 @@ async getUniqueTransmision(): Promise<string[]> {
     try {
       const whereClause: any = {};
 
-      if (marca) {
-        whereClause.marca = marca;
-      }
-      if (tipo) {
-        whereClause.tipo = tipo;
-      }
+      // if (marca) {
+      //   whereClause.marca = marca;
+      // }
+      // if (tipo) {
+      //   whereClause.tipo = tipo;
+      // }
       if (transmision) {
         whereClause.transmision = transmision;
       }
@@ -141,30 +117,36 @@ async getUniqueTransmision(): Promise<string[]> {
         }
       }
 
-      console.log('Filtros aplicados:', whereClause); // Mostrar los filtros aplicados para depuración
+      // console.log('Filtros aplicados:', whereClause); 
 
       const vehiculos = await this.vehiculosService.findAll(whereClause);
      
 
       return { message: 'Vehículos recuperados con éxito.', vehiculos };
     } catch (error) {
-      console.error('Error al recuperar los vehículos:', error); // Imprimir el error para depuración
+      console.error('Error al recuperar los vehículos:', error);
       throw new HttpException('Error al recuperar los vehículos.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<{ message: string; vehiculo: Vehiculo | null }> {
-    try {
-      const vehiculo = await this.vehiculosService.findOne(+id);
-      if (!vehiculo) {
-        throw new HttpException('Vehículo no encontrado.', HttpStatus.NOT_FOUND);
+      const tipoId = parseInt(id, 10);
+      if (isNaN(tipoId)) {
+          throw new HttpException("El ID debe ser un número", HttpStatus.BAD_REQUEST);
       }
-      return { message: 'Vehículo recuperado con éxito.', vehiculo };
-    } catch (error) {
-      throw new HttpException('Error al recuperar el vehículo.', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+  
+      try {
+          const vehiculo = await this.vehiculosService.findOne(tipoId);
+          if (!vehiculo) {
+              throw new HttpException('Vehículo no encontrado.', HttpStatus.NOT_FOUND);
+          }
+          return { message: 'Vehículo recuperado con éxito.', vehiculo };
+      } catch (error) {
+          throw new HttpException('Error al recuperar el vehículo.', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
   }
+  
 
   @Put(':id')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'imagenes', maxCount: 5 }], { storage }))

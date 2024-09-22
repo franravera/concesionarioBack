@@ -45,14 +45,42 @@ export class BrandsService {
 
     async findAll(): Promise<Brand[]> {
         return this.prisma.brand.findMany({
-            include: { vehiculos: true },
+            include: {
+                vehiculos: {
+                  select: {
+                    id: true,
+                    modelo: true,
+                    year: true,
+                    descripcion: true,
+                    precio: true,
+                    transmision: true,
+                    combustible: true,
+                    kilometraje: true,
+                    imagenes: true,
+                  }
+                }
+              },
         });
     }
 
-    async findOne(id: number, options?: any): Promise<Brand | null> {
+    async findOne(id: number): Promise<Brand | null> {
         return this.prisma.brand.findUnique({
             where: { id },
-            ...options,
+            include: {
+                vehiculos: {
+                  select: {
+                    id: true,
+                    modelo: true,
+                    year: true,
+                    descripcion: true,
+                    precio: true,
+                    transmision: true,
+                    combustible: true,
+                    kilometraje: true,
+                    imagenes: true,
+                  }
+                }
+              },
         });
     }
 

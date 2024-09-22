@@ -11,6 +11,7 @@ import {
   UploadedFiles,
   HttpException,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { Brand } from '@prisma/client';
@@ -99,21 +100,19 @@ export class BrandsController {
     }
 }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string): Promise<{ message: string; brand: Brand | null }> {
-    const tipoId = parseInt(id, 10);
-    if (isNaN(tipoId)) {
-        throw new HttpException("El ID debe ser un número", HttpStatus.BAD_REQUEST);
-    }
-
-    try {
-        const brand = await this.brandsService.findOne(tipoId, { include: { vehiculos: true } });
-        if (!brand) {
-            throw new HttpException('Brand no encontrada.', HttpStatus.NOT_FOUND);
-        }
-        return { message: 'Brand recuperada con éxito.', brand };
-    } catch (error) {
-        throw new HttpException('Error al recuperar la brand.', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+@Get(":id")
+async finOne(@Param("id") id:string) : Promise<Brand>{
+  const brandId = parseInt(id,10);
+  if(isNaN(brandId)){
+    throw new HttpException("El ID debe ser un número", HttpStatus.BAD_REQUEST);    
+  }
+  try {
+    return await this.brandsService.findOne(brandId);    
+  } catch (error) {
+    throw new NotFoundException(`La brand con ID ${id} no fue encontrada`)    
+  }
 }
+
+
+
 }

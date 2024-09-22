@@ -5,7 +5,7 @@ import { Vehiculo } from '@prisma/client';
 type VehiculoConImagenes = Omit<Vehiculo, 'id' | 'createdAt' | 'updatedAt'> & { 
   imagenes?: string[];
   brandId?: number;
-  tipoId?: number; // Debe ser opcional si es que puede no estar presente
+  tipoId?: number; 
 };
 
 @Injectable()
@@ -59,7 +59,6 @@ export class VehiculosService {
         ...vehiculoData,
         brand: brandId ? { connect: { id: brandId } } : undefined,
         tipo: tipoId ? { connect: { id: tipoId } } : undefined,
-        kilometraje: vehiculoData.kilometraje ?? null,
       },
     });
   
@@ -81,7 +80,8 @@ export class VehiculosService {
       where: whereClause,
       include: {
         imagenes: true,
-        tipo: true, // Asegúrate de incluir la relación
+        tipo: true,
+        brand: true,
       },
     });
   }
@@ -91,7 +91,8 @@ export class VehiculosService {
       where: { id },
       include: {
         imagenes: true,
-        tipo: true, // Incluye la relación aquí también
+        tipo: true, 
+        brand: true,
       },
     });
   }
@@ -104,45 +105,6 @@ export class VehiculosService {
     return this.prisma.vehiculo.delete({
       where: { id },
     });
-  }
-
-  // async getUniqueBrands(): Promise<string[]> {
-  //   try {
-  //     const uniqueBrands = await this.prisma.vehiculo.findMany({
-  //       select: { marca: true },
-  //       distinct: ['marca'],
-  //     });
-  //     return uniqueBrands.map((item) => item.marca);
-  //   } catch (error) {
-  //     console.error('Error al obtener marcas únicas:', error);
-  //     throw new Error(`Error al obtener marcas únicas: ${error.message}`);
-  //   }
-  // }
-
-  async getVehiclesByBrandId(brandId: number): Promise<any[]> {
-    try {
-      const vehicles = await this.prisma.vehiculo.findMany({
-        where: {
-          brandId: brandId,  
-        },
-        include: {
-          brand: {
-            select: {
-              nombre: true,  
-            },
-          },
-          imagenes: true
-        },
-      });
-  
-      return vehicles.map(vehicle => ({
-        ...vehicle,
-        brandName: vehicle.brand.nombre,
-      }));
-    } catch (error) {
-      console.error('Error al obtener vehículos por brandId:', error);
-      throw new Error(`Error al obtener vehículos por brandId: ${error.message}`);
-    }
   }  
 
   async getUniqueCombustible(): Promise<string[]> {
