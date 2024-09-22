@@ -58,7 +58,7 @@ export class BrandsController {
   async update(
     @Param('id') id: string,
     @UploadedFiles() files: { ImageBrand?: Express.Multer.File[] },
-    @Body() brandData: Omit<Brand, 'id' | 'createdAt' | 'updatedAt'>,
+    @Body() brandData: Omit<Brand, 'id'>,
   ): Promise<{ message: string; brand: Brand }> {
     try {
       const imagenUrl = files?.ImageBrand?.[0]?.path;

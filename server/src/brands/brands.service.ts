@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaService } from "prisma/prisma.service";
 import { Brand } from "@prisma/client";
 
-type BrandConImagen = Omit<Brand, 'id' | 'createdAt' | 'updatedAt'> & { imagen?: string; vehiculoId?: number };
+type BrandConImagen = Omit<Brand, 'id'> & { imagen?: string; vehiculoId?: number };
 
 @Injectable()
 export class BrandsService {
