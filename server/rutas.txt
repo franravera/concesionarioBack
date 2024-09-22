@@ -11,7 +11,7 @@ POST BRANDS http://localhost:3000/brands
 {
     "nombre":"Toyota"
 }
-PUT BRANDS IMAGENES http://localhost:3000/tipos/id utilizar ImageBrand
+PUT BRANDS IMAGENES http://localhost:3000/brands/id utilizar ImageBrand
 GET BRANDS http://localhost:3000/brands trae todas las brands, dentro tiene una propiedad "vehiculos" que es un array de todos los vehiculos que pertenecen a ese tipo, por ejemplo trae todos los vehiculos coupé
 GET BRANDS http://localhost:3000/brands/id trae la brand por id, dentro tiene una propiedad "vehiculos" que es un array de todos los vehiculos que pertenecen a ese tipo, por ejemplo trae todos los vehiculos coupé
 
