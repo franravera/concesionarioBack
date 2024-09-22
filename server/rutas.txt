@@ -25,7 +25,6 @@ POST VEHICULOS: http://localhost:3000/vehiculos
     "transmision": "Manual",
     "combustible": "Gasolina",
     "kilometraje": 11000,
-    "imagenes": [],
     "tipoId": 5,   
     "brandId": 15   
   }
