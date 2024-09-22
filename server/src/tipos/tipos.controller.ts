@@ -33,7 +33,7 @@ export class TiposController {
     @Body() tipoData: Omit<Tipo, 'id'>,
   ): Promise<{ message: string; tipo: Tipo }> {
     try {
-      Logger.log('Datos recibidos del cliente:', JSON.stringify(tipoData));
+      // Logger.log('Datos recibidos del cliente:', JSON.stringify(tipoData));
       const imagenUrl = files?.ImageTipo?.[0]?.path;
       const tipoConImagen: TipoConImagen = { ...tipoData, imagen: imagenUrl };
       const tipo = await this.tiposService.create(tipoConImagen);
@@ -108,7 +108,7 @@ export class TiposController {
       }
       return tipos;
     } catch (error) {
-      Logger.error('Error al obtener los tipos:', error);
+      // Logger.error('Error al obtener los tipos:', error);
       throw new HttpException(
         `Error al obtener los tipos: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR

@@ -1,4 +1,4 @@
-import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "prisma/prisma.service";
 import { Tipo } from "@prisma/client";
 
@@ -81,7 +81,6 @@ export class TiposService {
         },
       },
     });
-    Logger.log('Tipos obtenidos:', tipos); // Agregar log
     return tipos;
   }
   

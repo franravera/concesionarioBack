@@ -1,3 +1,34 @@
+POST TIPOS http://localhost:3000/tipos
+{
+    "nombre":"Coupe"
+}
+PUT TIPOS IMAGENES http://localhost:3000/tipos/id utilizar ImageTipo
+GET TIPOS http://localhost:3000/tipos trae todos los tipos, dentro tiene una propiedad "vehiculos" que es un array de todos los vehiculos que pertenecen a ese tipo, por ejemplo trae todos los vehiculos coupé
+GET TIPOS http://localhost:3000/tipos/id trae el tipo por id, dentro tiene una propiedad "vehiculos" que es un array de todos los vehiculos que pertenecen a ese tipo, por ejemplo trae todos los vehiculos coupé
+
+
+POST BRANDS http://localhost:3000/brands
+{
+    "nombre":"Toyota"
+}
+PUT BRANDS IMAGENES http://localhost:3000/tipos/id utilizar ImageBrand
+GET BRANDS http://localhost:3000/brands trae todas las brands, dentro tiene una propiedad "vehiculos" que es un array de todos los vehiculos que pertenecen a ese tipo, por ejemplo trae todos los vehiculos coupé
+GET BRANDS http://localhost:3000/brands/id trae la brand por id, dentro tiene una propiedad "vehiculos" que es un array de todos los vehiculos que pertenecen a ese tipo, por ejemplo trae todos los vehiculos coupé
+
+
+POST VEHICULOS: http://localhost:3000/vehiculos
+ {
+    "modelo": "Onix",
+    "year": 2021,
+    "descripcion": "Hatchback compacto y económico con buena conectividad.",
+    "precio": 15000.00,
+    "transmision": "Manual",
+    "combustible": "Gasolina",
+    "kilometraje": 11000,
+    "imagenes": [],
+    "tipoId": 5,   
+    "brandId": 15   
+  }
 GET VEHICULOS: http://localhost:3000/vehiculos
 GET VEHICULOS POR ID: http://localhost:3000/vehiculos/:id
 PUT VEHICULOS: http://localhost:3000/vehiculos/:id
