@@ -72,19 +72,18 @@ export class VehiculosService {
       where: { id },
       include: { imagenes: true },
     });
-  }
-  
+  }  
 
   async findAll(whereClause: any = {}): Promise<Vehiculo[]> {
     return this.prisma.vehiculo.findMany({
       where: whereClause,
       include: {
         imagenes: true,
-        tipo: true,
+        tipo: true,  
         brand: true,
       },
     });
-  }
+  }  
   
   async findOne(id: number): Promise<Vehiculo | null> {
     return this.prisma.vehiculo.findUnique({
