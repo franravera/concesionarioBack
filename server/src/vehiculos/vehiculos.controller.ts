@@ -51,26 +51,26 @@ export class VehiculosController {
     @Query('maxPrecio') maxPrecio?: string,
     @Query('tipoId') tipoId?: string,
     @Query('brandId') brandId?: string,
-    @Query('page') page: string = '1',      // Paginación: página por defecto es 1
-    @Query('limit') limit: string = '6'    // Límite: cantidad de resultados por defecto es 10
-  ): Promise<{ message: string; vehiculos: Vehiculo[] }> {
+    @Query('page') page: string = '1',     
+    @Query('limit') limit: string = '6'    
+  ): Promise<{ message: string; vehiculos: Vehiculo[]; total: number }> {
     try {
       const whereClause: any = {};
-
+  
       if (transmision) {
         whereClause.transmision = transmision;
       }
       if (combustible) {
         whereClause.combustible = combustible.trim();
       }
-
+  
       if (minKilometraje && isNaN(Number(minKilometraje))) {
         throw new HttpException('minKilometraje debe ser un número válido.', HttpStatus.BAD_REQUEST);
       }
       if (maxKilometraje && isNaN(Number(maxKilometraje))) {
         throw new HttpException('maxKilometraje debe ser un número válido.', HttpStatus.BAD_REQUEST);
       }
-
+  
       if (minKilometraje) {
         whereClause.kilometraje = { gte: Number(minKilometraje) };
       }
@@ -80,7 +80,7 @@ export class VehiculosController {
         }
         whereClause.kilometraje.lte = Number(maxKilometraje);
       }
-
+  
       if (minPrecio || maxPrecio) {
         whereClause.precio = {};
         if (minPrecio) {
@@ -90,23 +90,28 @@ export class VehiculosController {
           whereClause.precio.lte = Number(maxPrecio);
         }
       }
-
+  
       if (tipoId) {
         whereClause.tipoId = Number(tipoId);
       }
       if (brandId) {
         whereClause.brandId = Number(brandId);
       }
-
+  
       const pageNumber = Number(page);
       const limitNumber = Number(limit);
+      
+      const total = await this.vehiculosService.count(whereClause);
+
       const vehiculos = await this.vehiculosService.findAll(whereClause, pageNumber, limitNumber);
-      return { message: 'Vehículos recuperados con éxito.', vehiculos };
+  
+      return { message: 'Vehículos recuperados con éxito.', vehiculos, total };
     } catch (error) {
       console.error('Error al recuperar los vehículos:', error);
       throw new HttpException('Error al recuperar los vehículos.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+  
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<{ message: string; vehiculo: Vehiculo | null }> {

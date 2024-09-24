@@ -89,6 +89,14 @@ export class VehiculosService {
     });
   }
 
+  async count(whereClause: any = {}): Promise<number> {
+    return this.prisma.vehiculo.count({
+      where: whereClause,
+    });
+  }
+  
+  
+
   async findOne(id: number): Promise<Vehiculo | null> {
     return this.prisma.vehiculo.findUnique({
       where: { id },
