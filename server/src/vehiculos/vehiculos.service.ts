@@ -2,15 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Vehiculo } from '@prisma/client';
 
-type VehiculoConImagenes = Omit<Vehiculo, 'id' | 'createdAt' | 'updatedAt'> & { 
+type VehiculoConImagenes = Omit<Vehiculo, 'id' | 'createdAt' | 'updatedAt'> & {
   imagenes?: string[];
   brandId?: number;
-  tipoId?: number; 
+  tipoId?: number;
 };
 
 @Injectable()
 export class VehiculosService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async removeImagesByIds(vehiculoId: number, imageIds: number[]): Promise<void> {
     await this.prisma.imagen.deleteMany({
@@ -32,7 +32,7 @@ export class VehiculosService {
 
   async create(data: VehiculoConImagenes): Promise<Vehiculo> {
     const { tipoId, brandId, imagenes, ...vehiculoData } = data;
-  
+
     return this.prisma.vehiculo.create({
       data: {
         ...vehiculoData,
@@ -48,11 +48,11 @@ export class VehiculosService {
       },
     });
   }
-  
-  
+
+
   async update(id: number, data: Partial<VehiculoConImagenes>): Promise<Vehiculo> {
     const { imagenes, brandId, tipoId, ...vehiculoData } = data;
-  
+
     const updatedVehiculo = await this.prisma.vehiculo.update({
       where: { id },
       data: {
@@ -61,41 +61,45 @@ export class VehiculosService {
         tipo: tipoId ? { connect: { id: tipoId } } : undefined,
       },
     });
-  
+
     if (imagenes && imagenes.length > 0) {
       await this.prisma.imagen.createMany({
         data: imagenes.map((url) => ({ url, vehiculoId: id })),
       });
     }
-  
+
     return this.prisma.vehiculo.findUnique({
       where: { id },
       include: { imagenes: true },
     });
-  }  
+  }
 
-  async findAll(whereClause: any = {}): Promise<Vehiculo[]> {
+  async findAll(whereClause: any = {}, page: number = 1, limit: number = 6): Promise<Vehiculo[]> {
+    const offset = (page - 1) * limit;
+
     return this.prisma.vehiculo.findMany({
       where: whereClause,
+      skip: offset,
+      take: limit,
       include: {
         imagenes: true,
-        tipo: true,  
+        tipo: true,
         brand: true,
       },
     });
-  }  
-  
+  }
+
   async findOne(id: number): Promise<Vehiculo | null> {
     return this.prisma.vehiculo.findUnique({
       where: { id },
       include: {
         imagenes: true,
-        tipo: true, 
+        tipo: true,
         brand: true,
       },
     });
   }
-  
+
 
   async remove(id: number): Promise<Vehiculo> {
     await this.prisma.imagen.deleteMany({
@@ -104,7 +108,7 @@ export class VehiculosService {
     return this.prisma.vehiculo.delete({
       where: { id },
     });
-  }  
+  }
 
   async getUniqueCombustible(): Promise<string[]> {
     const uniqueCombustible = await this.prisma.vehiculo.findMany({
