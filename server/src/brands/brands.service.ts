@@ -78,6 +78,8 @@ export class BrandsService {
                     combustible: true,
                     kilometraje: true,
                     imagenes: true,
+                    brand:true,
+                    tipo:true
                   }
                 }
               },

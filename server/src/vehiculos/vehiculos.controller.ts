@@ -40,88 +40,38 @@ export class VehiculosController {
       throw new HttpException('Error al crear el vehículo.', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  @Get('rango-kilometraje')
-  async getKilometrajeRange(): Promise<{ minKilometraje: number; maxKilometraje: number }> {
-    try {
-      return await this.vehiculosService.getKilometrajeRange();
-    } catch (error) {
-      console.error('Error al obtener el rango de kilometraje:', error);
-      throw new HttpException('Error al obtener el rango de kilometraje.', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
+
+//   @Get('rango-kilometraje')
+//   async getKilometrajeRange(): Promise<{ minKilometraje: number; maxKilometraje: number }> {
+//     try {
+//       return await this.vehiculosService.getKilometrajeRange();
+//     } catch (error) {
+//       console.error('Error al obtener el rango de kilometraje:', error);
+//       throw new HttpException('Error al obtener el rango de kilometraje.', HttpStatus.INTERNAL_SERVER_ERROR);
+//     }
+//   }
 
 
-@Get('combustible')
-async getUniqueCombustible(): Promise<string[]> {
-  try {
-    return await this.vehiculosService.getUniqueCombustible();
-  } catch (error) {
-    console.error('Error al obtener combustible:', error);  
-    throw new HttpException('Error al obtener combustible.', HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-}
-@Get('transmision')
-async getUniqueTransmision(): Promise<string[]> {
-  try {
-    return await this.vehiculosService.getUniqueTransmision();
-  } catch (error) {
-    console.error('Error al obtener transmision:', error);  
-    throw new HttpException('Error al obtener transmision.', HttpStatus.INTERNAL_SERVER_ERROR);
-  }
-}
-// @Get()
-// async findAll(
-//   @Query('transmision') transmision?: string,
-//   @Query('combustible') combustible?: string,
-//   @Query('minKilometraje') minKilometraje?: string,
-//   @Query('maxKilometraje') maxKilometraje?: string,
-//   @Query('minPrecio') minPrecio?: string,
-//   @Query('maxPrecio') maxPrecio?: string,
-//   @Query('tipoId') tipoId?: string, 
-//   @Query('brandId') brandId?: string 
-// ): Promise<{ message: string; vehiculos: Vehiculo[] }> {
+// @Get('combustible')
+// async getUniqueCombustible(): Promise<string[]> {
 //   try {
-//     const whereClause: any = {};
-
-//     if (transmision) {
-//       whereClause.transmision = transmision;
-//     }
-//     if (combustible) {
-//       whereClause.combustible = combustible.trim();
-//     }
-
-//     if (minKilometraje && isNaN(Number(minKilometraje))) {
-//       throw new HttpException('minKilometraje debe ser un número válido.', HttpStatus.BAD_REQUEST);
-//     }
-//     if (maxKilometraje && isNaN(Number(maxKilometraje))) {
-//       throw new HttpException('maxKilometraje debe ser un número válido.', HttpStatus.BAD_REQUEST);
-//     }
-    
-
-//     if (minPrecio || maxPrecio) {
-//       whereClause.precio = {};
-//       if (minPrecio) {
-//         whereClause.precio.gte = Number(minPrecio);
-//       }
-//       if (maxPrecio) {
-//         whereClause.precio.lte = Number(maxPrecio);
-//       }
-//     }
-
-//     if (tipoId) {
-//       whereClause.tipoId = Number(tipoId);
-//     }
-//     if (brandId) {
-//       whereClause.brandId = Number(brandId);
-//     }
-   
-//     const vehiculos = await this.vehiculosService.findAll(whereClause);
-//     return { message: 'Vehículos recuperados con éxito.', vehiculos };
+//     return await this.vehiculosService.getUniqueCombustible();
 //   } catch (error) {
-//     console.error('Error al recuperar los vehículos:', error);
-//     throw new HttpException('Error al recuperar los vehículos.', HttpStatus.INTERNAL_SERVER_ERROR);
+//     console.error('Error al obtener combustible:', error);  
+//     throw new HttpException('Error al obtener combustible.', HttpStatus.INTERNAL_SERVER_ERROR);
 //   }
 // }
+// @Get('transmision')
+// async getUniqueTransmision(): Promise<string[]> {
+//   try {
+//     return await this.vehiculosService.getUniqueTransmision();
+//   } catch (error) {
+//     console.error('Error al obtener transmision:', error);  
+//     throw new HttpException('Error al obtener transmision.', HttpStatus.INTERNAL_SERVER_ERROR);
+//   }
+// }
+
+
 @Get()
 async findAll(
   @Query('transmision') transmision?: string,
@@ -150,7 +100,6 @@ async findAll(
       throw new HttpException('maxKilometraje debe ser un número válido.', HttpStatus.BAD_REQUEST);
     }
 
-    // Verificar el rango de kilometraje
     if (minKilometraje) {
       whereClause.kilometraje = { gte: Number(minKilometraje) };
     }
@@ -161,7 +110,6 @@ async findAll(
       whereClause.kilometraje.lte = Number(maxKilometraje);
     }
 
-    // Filtrar por precios
     if (minPrecio || maxPrecio) {
       whereClause.precio = {};
       if (minPrecio) {
@@ -172,7 +120,6 @@ async findAll(
       }
     }
 
-    // Filtrar por tipoId y brandId
     if (tipoId) {
       whereClause.tipoId = Number(tipoId);
     }

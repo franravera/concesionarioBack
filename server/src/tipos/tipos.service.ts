@@ -100,7 +100,8 @@ export class TiposService {
             combustible: true,
             kilometraje: true,
             imagenes: true,
-            brand:true
+            brand:true,
+            tipo:true
           }
         }
       },
